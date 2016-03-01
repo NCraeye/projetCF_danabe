@@ -34,9 +34,8 @@ Synthèse (assistée) d'un contrôleur du niveau d'une cuve}
 \chapter{Le rapport}
 \section{Rôle de la constante {\tt nbFailures} (2 points)}
 
-$nbFailures$ est la constante qui limite le nombre de vannes pouvant tomber en panne simultanément.
-Cette constante permet de lancer une configuration du système avec un nombre de pannes connues. 
-L'assert du noeud System assure, lors du lancement du modèle par l'utilisateur, que ce dernier a une configuration qui fait sens : le nombre de pannes étant limité au nombre de vannes existantes dans le modèle en cours.
+$nbFailures$ est la constante qui limite le nombre de vannes pouvant tomber en panne simultanément. Elle permet de lancer une configuration du système avec un nombre de pannes connues. 
+L'assert du composant System assure, lors du lancement du modèle par l'utilisateur, que ce dernier a une configuration qui fait sens : le nombre de pannes étant limité au nombre de vannes existantes et étant en panne dans le modèle en cours.
 
 $ValveVirtual$ est le composant permet de simuler une valve parfaite (sans panne)
 
