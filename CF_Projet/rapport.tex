@@ -37,7 +37,12 @@ Synthèse (assistée) d'un contrôleur du niveau d'une cuve}
 $nbFailures$ est la constante qui limite le nombre de vannes pouvant tomber en panne simultanément. Elle permet de lancer une configuration du système avec un nombre de pannes prédéfini. \\
 L'assert du composant System assure, lors du lancement du modèle par l'utilisateur, que ce dernier a une configuration qui fait sens : le nombre de pannes étant limité au nombre de vannes existantes et étant en panne dans le modèle en cours.
 
-$ValveVirtual$ est le composant permettant de simuler une valve parfaite (sans panne). En l'utilisant dans le modèle on peut s'assurer la cohérence du modèle
+$ValveVirtual$ est le composant permettant de simuler une valve parfaite, autrement dit sans panne. En l'intégrant au modèle, via CtrlVV, on peut alors confirmer la cohérence du modèle indépendemment de la gestion des pannes. \\
+Pour chaque niveau d'itération, on va donc créer une version virtuelle, sans panne, pour contrôler le système mais aussi créer la version avec Ctrl et Valve qui assure la gestion des pannes.
+
+On retrouve cette organisation dans le fichier GNUmakefile, à la racine du projet. Il lance toutes les configurations possibles du système sur lequel nous travaillons. On peut le voir lors de la génération du fichier .time : une première boucle assure la génération des fichiers pour tous les contrôleurs ( Ctrl et CtrlVV). Pour chacun d'entre eux, une boucle va produire des fichiers associés aux nombres de pannes.
+
+
 
 \section{Résultats avec le contrôleur initial {\tt Ctrl}}
 
