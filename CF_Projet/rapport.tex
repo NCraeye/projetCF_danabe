@@ -42,8 +42,6 @@ Pour chaque niveau d'itération, on va donc créer une version virtuelle, sans p
 
 On retrouve cette organisation dans le fichier GNUmakefile, à la racine du projet. Il lance toutes les configurations possibles du système sur lequel nous travaillons. On peut le voir lors de la génération du fichier .time : une première boucle assure la génération des fichiers pour tous les contrôleurs ( Ctrl et CtrlVV). Pour chacun d'entre eux, une boucle va produire des fichiers associés aux nombres de pannes.
 
-
-
 \section{Résultats avec le contrôleur initial {\tt Ctrl}}
 
 \subsection{Calcul d'un contrôleur}
@@ -56,6 +54,13 @@ On retrouve cette organisation dans le fichier GNUmakefile, à la racine du proj
 \lstinputlisting{Res/System0FCtrl0F4I.res}
 \paragraph{Interprétation des résultats}
 
+On observe que sur les différentes itérations : excepté la première, elles sont toutes identiques. De plus, notre système n'a aucune deadlock et les situations redoutées n'existe plus après cette première tentative. Donc les modifications appliquées à partir de l'itération 1 sont concluantes et permettent d'obtenir un système que l'on peut supposer fiable.
+\begin{itemize}
+%% TODO : comprendre comment faire et répondre posément
+	\item oui. À partir de l'itération 1, il n'y a plus de situation critique et nous n'avions aucun deadlock en tout cas. 
+	\item Avec un débit aval de 0, on obtient moins de sommets. On présume donc qu'il est optimal d'avoir un débit de 0 puisque cela nous permet de n'avoir aucune situation critique en gérant moins de cas.
+
+\end{itemize}
 \subsubsection{Avec 1 défaillance (1 point)}
 \lstinputlisting{Res/System1FCtrl.res}
 \lstinputlisting{Res/System1FCtrl1F1I.res}
