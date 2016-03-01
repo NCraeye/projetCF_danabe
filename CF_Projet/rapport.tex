@@ -24,7 +24,7 @@ Synthèse (assistée) d'un contrôleur du niveau d'une cuve}
 
 \date{}
 
-\author{Nom1 \and Nom2 \and Nom3}
+\author{Poulet \and Poule \and Friture}
 
 \maketitle
 
@@ -35,7 +35,10 @@ Synthèse (assistée) d'un contrôleur du niveau d'une cuve}
 \section{Rôle de la constante {\tt nbFailures} (2 points)}
 
 $nbFailures$ est la constante qui limite le nombre de vannes pouvant tomber en panne simultanément.
-Cette constante permet de lancer une configuration du système lorsque l'on a un nombre de pannes connues. L'assert que nous voyons pour le noeud System permet de s'assurer dans le modèle que l'utilisateur le lance avec une configuration qui a du sens : le nombre de pannes est limité au nombre de vannes existantes dans le modèle en cours.
+Cette constante permet de lancer une configuration du système avec un nombre de pannes connues. 
+L'assert du noeud System assure, lors du lancement du modèle par l'utilisateur, que ce dernier a une configuration qui fait sens : le nombre de pannes étant limité au nombre de vannes existantes dans le modèle en cours.
+
+$ValveVirtual$ est le composant permet de simuler une valve parfaite (sans panne)
 
 \section{Résultats avec le contrôleur initial {\tt Ctrl}}
 
