@@ -1,52 +1,36 @@
-with SystemCtrl1 do
-
+with System, SystemCtrl1, SystemCtrl2, SystemCtrl3 do
     deadlock := any_s  - src(any_t - self_epsilon);
-
     tr_deadlock := trace(initial, any_t, deadlock);
-
-    notResetable := any_s - coreach(initial, any_t);
-
+    notResetable := any_s - coreach(initial, any_t); // à cause des pannes
     tr_notResetable := trace(initial, any_t, notResetable);
 
     /* Niveaux critiques et Situations redoutées */
-
     NC := any_s & [T.levelWater=0 | T.levelWater = nbSensors]; 
-
-    SR := deadlock | NC;
+    SR := deadlock | NC; // Situation redoutée
 
     /* La production */
-
-    out0 := [T.output = 0];
-
-    out1 := [T.output = 1];
-
-    out2 := [T.output = 2];
-
+    out0 := [T.output=0];
+    out1 := [T.output=1];
+    out2 := [T.output=2];
 
     /* Système d'équations au point fixe
-
-
      * CGagnant = (any_s - SR) & src(CCoupGagnant);
-
      * CCoupGagnant = CCoup & rtgt(EPerdant);
-
      * EPerdant = (any_s - SR) & (src(ECoupPerdant) - src(ECoupNonPerdant));
-
      * ECoupPerdant = ECoup & rtgt(CGagnant);
-
      * ECoupNonPerdant = ECoup & rtgt(any_s - CGagnant):
-
-
      */
-
     CCoup := any_t & label cmd;
-
     ECoup := any_t & label env;
+    CCoupGagnant -= CCoup & rtgt((any_s - SR) & (src(ECoup & rtgt((any_s - SR) & src(CCoupGagnant))) - src(ECoup & rtgt(any_s - ((any_s - SR) & src(CCoupGagnant)))))); //calcule le + gd point fixe du controleur : ce sont les seules conditions qu'il gardera
 
-    CCoupGagnant -= CCoup & rtgt((any_s - SR) & (src(ECoup & rtgt((any_s - SR) & src(CCoupGagnant))) - src(ECoup & rtgt(any_s - ((any_s - SR) & src(CCoupGagnant))))));
-
-    /* Projection du controleur*/
-
+ with System do
+   /* Projection et génération du controleur*/
     project(any_s, (empty_t, CCoupGagnant), 'CTRL1', true, C)> 'Ctrl1.alt';
-
 done
+
+/*
+ *Au delà de 2 itérations, on trouve une constante de SR (27)
+ *
+ *
+ */

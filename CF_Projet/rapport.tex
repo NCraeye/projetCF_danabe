@@ -34,6 +34,9 @@ Synthèse (assistée) d'un contrôleur du niveau d'une cuve}
 \chapter{Le rapport}
 \section{Rôle de la constante {\tt nbFailures} (2 points)}
 
+$nbFailures$ est la constante qui limite le nombre de vannes pouvant tomber en panne simultanément.
+Cette constante permet de lancer une configuration du système lorsque l'on a un nombre de pannes connues. L'assert que nous voyons pour le noeud System permet de s'assurer dans le modèle que l'utilisateur le lance avec une configuration qui a du sens : le nombre de pannes est limité au nombre de vannes existantes dans le modèle en cours.
+
 \section{Résultats avec le contrôleur initial {\tt Ctrl}}
 
 \subsection{Calcul d'un contrôleur}
