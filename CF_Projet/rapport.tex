@@ -54,13 +54,14 @@ On retrouve cette organisation dans le fichier GNUmakefile, à la racine du proj
 \lstinputlisting{Res/System0FCtrl0F4I.res}
 \paragraph{Interprétation des résultats}
 
-On observe que sur les différentes itérations : excepté la première, elles sont toutes identiques. De plus, notre système n'a aucune deadlock et les situations redoutées n'existe plus après cette première tentative. Donc les modifications appliquées à partir de l'itération 1 sont concluantes et permettent d'obtenir un système que l'on peut supposer fiable.
+On observe que sur les différentes itérations : excepté la première, elles sont toutes identiques. De plus, notre système n'a aucun deadlock et les situations redoutées n'existent plus après cette première tentative. Donc les modifications appliquées à partir de l'itération 1 sont concluantes et permettent d'obtenir un système que l'on peut supposer fiable.
+
 \begin{itemize}
-%% TODO : comprendre comment faire et répondre posément
-	\item oui. À partir de l'itération 1, il n'y a plus de situation critique et nous n'avions aucun deadlock en tout cas. 
+	\item Oui. À partir de l'itération 1, il n'y a plus de situation critique et nous n'avions aucun état puit. Or, dans cette situation, CtrlCanControl parvient à contrôler 27 transitions.
 	\item Avec un débit aval de 0, on obtient moins de sommets. On présume donc qu'il est optimal d'avoir un débit de 0 puisque cela nous permet de n'avoir aucune situation critique en gérant moins de cas.
 
 \end{itemize}
+
 \subsubsection{Avec 1 défaillance (1 point)}
 \lstinputlisting{Res/System1FCtrl.res}
 \lstinputlisting{Res/System1FCtrl1F1I.res}
@@ -69,6 +70,14 @@ On observe que sur les différentes itérations : excepté la première, elles s
 \lstinputlisting{Res/System1FCtrl1F4I.res}
 \paragraph{Interprétation des résultats}
 
+Nous voyons que comparé à la version 0 défaillance, l'itération initiale a beaucoup plus de situations redoutées possibles, ce qui est normal pour une situation avec une valve défaillante. \\
+À la première itération, nous remarquons des états puits produits, et que les sommets pour lesquels le niveau d'eau est critique sont tous des deadlocks puisque SR est équivalent à deadlock. \\
+
+\begin{itemize}
+	\item Je pense que non car quel que soit le nombre d'itérations, nous avons toujours des états puits et des états à niveau d'eau critique.
+	\item 
+
+\end{itemize}
 \subsubsection{Avec 2 défaillances (1 point)}
 \lstinputlisting{Res/System2FCtrl.res}
 \lstinputlisting{Res/System2FCtrl2F1I.res}
