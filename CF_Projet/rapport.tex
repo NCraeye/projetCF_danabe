@@ -10,6 +10,8 @@
 \usepackage{makeidx}
 \usepackage{graphics}
 \usepackage{graphicx}
+\usepackage{float} %
+\usepackage{caption} %
 \usepackage{longtable}
 \usepackage{moreverb}
 \usepackage{listings}
@@ -32,15 +34,20 @@ Synthèse (assistée) d'un contrôleur du niveau d'une cuve}
 \input{tank}
 
 \chapter{Le rapport}
+
+Pour les deux questions qui suivent, nous avons analysé essentiellement les fichiers GNUmakefile à la racine du projet, system.alt, parameters.alt, tank.alt, test.alt, et CtrlVV.alt.
+En effet nous avons remarqués dans le fichier GNUmakefile, qu'à l'utilisation de la commande "make" on génère toutes les configurations possibles du système sur lequel nous travaillons : 
+une première boucle assure la génération des fichiers pour tous les contrôleurs ( Ctrl et CtrlVV). Pour chacun d'entre eux, une boucle va produire des fichiers associés aux nombres de pannes.
+
 \section{Rôle de la constante {\tt nbFailures} (2 points)}
 
 $nbFailures$ est la constante qui récupère le nombre de pannes prédéfini au lancement d'une configuration du système. En effet, elle est initialisée en prenant la valeur de la variable $nbPannes$ dans le système en cours. \\
 La contrainte, et assertion, du composant {\tt System} $nbFailures >= (V[0].fail + V[1].fail + V[2].fail)$ permet d'assurer que le modèle lancé par l'utilisateur a une configuration cohérente, c'est-à-dire que le nombre de valves en panne dans le modèle en cours sera compris entre 0 (meilleur cas : il n'y aurait aucune valve en panne) et 3 (pire cas : les trois valves, i.e toutes, existantes du système sont en panne). \\
 
+\section{Rôle des composants {\tt ValveVirtual} et {\tt CtrlVV} (4 points)}
+
 $ValveVirtual$ est le composant permettant de simuler une valve parfaite, autrement dit sans panne. En l'intégrant au modèle, via CtrlVV, on peut alors confirmer la cohérence du modèle indépendemment de la gestion des pannes. \\
 Pour chaque niveau d'itération, on va donc créer une version virtuelle, sans panne, pour contrôler le système mais aussi créer la version avec Ctrl et Valve qui assure la gestion des pannes.
-
-On retrouve cette organisation dans le fichier GNUmakefile, à la racine du projet. Il lance toutes les configurations possibles du système sur lequel nous travaillons. On peut le voir lors de la génération du fichier .time : une première boucle assure la génération des fichiers pour tous les contrôleurs ( Ctrl et CtrlVV). Pour chacun d'entre eux, une boucle va produire des fichiers associés aux nombres de pannes.
 
 \section{Résultats avec le contrôleur initial {\tt Ctrl}}
 
@@ -71,10 +78,20 @@ On observe que sur les différentes itérations : excepté la première, elles s
 \paragraph{Interprétation des résultats}
 
 Nous voyons que comparé à la version 0 défaillance, l'itération initiale a beaucoup plus de situations redoutées possibles, ce qui est normal pour une situation avec une valve défaillante. \\
-À la première itération, nous remarquons des états puits produits, et que les sommets pour lesquels le niveau d'eau est critique sont tous des deadlocks puisque SR est équivalent à deadlock. \\
+À la première itération, nous remarquons des états puits produits, et que les sommets pour lesquels le niveau d'eau est critique sont tous des deadlocks puisque SR est équivalent à deadlock. \\ 
+Or, en utilisant Altarica studio on s'aperçoit que la trace des deadlock ne nous mènent qu'à 4 sommets. En affichant le graphe avec la commande $dot(any\_s, tr\_deadlock)$, on découvre que ces 4 cas sont lorsque le niveau de l'eau dans la cuve est débordant.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=14cm]{img/CtrlF1I1.png}
+  %\caption{}
+\end{figure}
+
+
+La situation se stabilise à l'itération 2 : Par la suite, il n'y a plus de changement de valeurs. Mais avant ca, entre l'itération 1 et l'itération 2, on remarque le seul le nombre de transitions change, les états sont déjà stables.
 
 \begin{itemize}
-	\item Je pense que non car quel que soit le nombre d'itérations, nous avons toujours des états puits et des états à niveau d'eau critique.
+	\item En ayant une valve défaillante, on peut contrôler toutes les situations excepté les débordements de cuves, qui peuvent arriver quelle que soit la valve abîmée. Dans ce cas, on doit trouver une solution spécifique à ce problème : par exemple, garder une ouverture en haut de la cuve qui entrainerait une déperdition de l'eau le temps que l'on répare la valve.
 	\item 
 
 \end{itemize}
@@ -95,8 +112,6 @@ Nous voyons que comparé à la version 0 défaillance, l'itération initiale a b
 \paragraph{Interprétation des résultats}
 
 \subsection{Calcul des contrôleurs optimisés (2 points)}
-
-\section{Rôle des composants {\tt ValveVirtual} et {\tt CtrlVV} (4 points)}
 
 \section{Résultats avec le contrôleur initial {\tt CtrlVV}}
 

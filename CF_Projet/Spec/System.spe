@@ -36,5 +36,6 @@ with SystemNbPannesFNomDuControleur do
   project(any_s, (empty_t,CCoupGagnantUtile), 'CtrlInitialNbPannesFNumIter', true,C)
 	> 'Controleurs/CtrlInitialNbPannesFNumIter.alt';
   /* record results */
-  show(any_s, any_t, deadlock, NC, SR , out0, out1, out2, CtrlCanControl,CCoupGagnant, CCoupGagnantUtile) > 'Res/$NODENAME.res';
+  show(any_s, any_t, deadlock,tr_deadlock, NC, SR , out0, out1, out2, CtrlCanControl,CCoupGagnant, CCoupGagnantUtile) > 'Res/$NODENAME.res';
+
 done
