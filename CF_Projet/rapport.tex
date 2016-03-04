@@ -35,20 +35,24 @@ Synthèse (assistée) d'un contrôleur du niveau d'une cuve}
 
 \chapter{Le rapport}
 
-Pour les deux questions qui suivent, nous avons analysé essentiellement les fichiers GNUmakefile à la racine du projet, system.alt, parameters.alt, tank.alt, test.alt, et CtrlVV.alt.
-En effet nous avons remarqués dans le fichier GNUmakefile, qu'à l'utilisation de la commande "make" on génère toutes les configurations possibles du système sur lequel nous travaillons : 
-une première boucle assure la génération des fichiers pour tous les contrôleurs ( Ctrl et CtrlVV). Pour chacun d'entre eux, une boucle va produire des fichiers associés aux nombres de pannes.
+Pour les deux questions qui suivent, nous avons analysé essentiellement le fichier GNUmakefile à la racine du projet, mais aussi les fichiers System.alt, Parameters.alt, tank.alt, test.alt, et CtrlVV.alt.
+En effet nous avons remarqué, dans le fichier GNUmakefile, qu'à l'utilisation de la commande "make" on génère toutes les configurations possibles du système sur lequel nous travaillons : 
+une première boucle for assure la génération des fichiers pour tous les contrôleurs (Ctrl et CtrlVV) ; puis une deuxième boucle for va produire, pour chacun d'entre eux, les différents systèmes associés aux différents nombres de pannes possibles (i.e : 0, 1, 2 et 3).
+
 
 \section{Rôle de la constante {\tt nbFailures} (2 points)}
 
-$nbFailures$ est la constante qui récupère le nombre de pannes prédéfini au lancement d'une configuration du système. En effet, elle est initialisée en prenant la valeur de la variable $nbPannes$ dans le système en cours. \\
-La contrainte, et assertion, du composant {\tt System} $nbFailures >= (V[0].fail + V[1].fail + V[2].fail)$ permet d'assurer que le modèle lancé par l'utilisateur a une configuration cohérente, c'est-à-dire que le nombre de valves en panne dans le modèle en cours sera compris entre 0 (meilleur cas : il n'y aurait aucune valve en panne) et 3 (pire cas : les trois valves, i.e toutes, existantes du système sont en panne). \\
+$nbFailures$ est la constante qui récupère le nombre de pannes prédéfini au lancement d'une configuration du système. En effet, elle est initialisée en prenant la valeur de la variable $nbPannes$ (cf GNUmakefile) dans le système en cours. \\
+La contrainte, et assertion, du composant {\tt System} $nbFailures >= (V[0].fail + V[1].fail + V[2].fail)$ permet d'assurer que le modèle lancé par l'utilisateur a une configuration cohérente. En effet, elle vérifie que le nombre de valves en panne dans le modèle en cours sera compris entre 0 (meilleur cas : il n'y aurait aucune valve en panne) et 3 (pire cas : les trois valves existantes du système sont en panne). \\
+
 
 \section{Rôle des composants {\tt ValveVirtual} et {\tt CtrlVV} (4 points)}
 
-$ValveVirtual$ est le composant permettant de simuler une valve parfaite, autrement dit sans panne. En l'intégrant au modèle, via CtrlVV, on peut alors confirmer la cohérence du modèle indépendemment de la gestion des pannes. \\
-$CtrlVV$ est un composant pouvant prendre la place du contrôleur. Ce qui l'en distingue est sa capacité à gérer en parallèle du système, une simulation du système mais dans laquelle aucune panne n'est possible. Lorsqu'il agit sur une des valve du système réel, $CtrlVV$ reproduit la même action sur la Valve correspondante du simulateur. \\
-Si les conséquences dans la cuve réelle sont différentes de celles dans la cuve simulée, alors il détecte une défaillance de cette valve.
+$ValveVirtual$ est le composant permettant de simuler une valve parfaite, autrement dit une valve qui ne peut pas tomber en panne. Le composant {\tt ValveVirtual} étant intégré au modèle, via {\tt CtrlVV}, on peut alors confirmer la cohérence du modèle indépendemment de la gestion des pannes. \\
+$CtrlVV$ est le composant qui, en remplaçant le contrôleur {\tt Ctrl}, contrôle le système. Ce qui le distingue du précédent est sa capacité à gérer en parallèle du système, une simulation du système dans laquelle aucune panne n'est possible. \\
+Lorsque {\tt CtrlVV} agit sur une des valves du système réel, il reproduit la même action sur la valve correspondante du simulateur. \\
+Si les conséquences dans la cuve réelle sont différentes de celles dans la cuve simulée, alors il détecte que la valve concernée est défaillante.
+
 
 \section{Résultats avec le contrôleur initial {\tt Ctrl}}
 
@@ -62,12 +66,11 @@ Si les conséquences dans la cuve réelle sont différentes de celles dans la cu
 \lstinputlisting{Res/System0FCtrl0F4I.res}
 \paragraph{Interprétation des résultats}
 
-On observe que sur les différentes itérations : excepté la première, elles sont toutes identiques. De plus, notre système n'a aucun deadlock et les situations redoutées n'existent plus après cette première tentative. Donc les modifications appliquées à partir de l'itération 1 sont concluantes et permettent d'obtenir un système que l'on peut supposer fiable.
+On observe que, excepté la première, les différentes itérations sont toutes identiques. De plus, dans cette configuration, nous notons que le système n'a aucun deadlock et que les situations redoutées n'existent plus après la première tentative. Nous en concluons que le raffinement après l'itération 1 est concluant et permet d'obtenir un système que l'on peut supposer fiable.
 
 \begin{itemize}
-	\item Oui. À partir de l'itération 1, il n'y a plus de situation critique et nous n'avions aucun état puit. Or, dans cette situation, CtrlCanControl parvient à contrôler 27 transitions.
-	\item Out2 étant la sortie utilisée dans le plus de situations (ou sommets) alors que les situations critiques sont nulles. Il est donc optimal.
-
+	\item Oui. À partir de l'itération 1, il n'y a ni situation critique et ni état puit. Dans cette situation, CtrlCanControl parvient à contrôler 27 transitions.
+	\item Out2 étant la sortie utilisée dans le plus de situations (ou sommets) et ayant un nombre de situations critiques nul, le modèle est déjà optimal.
 \end{itemize}
 
 \subsubsection{Avec 1 défaillance (1 point)}
@@ -78,20 +81,19 @@ On observe que sur les différentes itérations : excepté la première, elles s
 \lstinputlisting{Res/System1FCtrl1F4I.res}
 \paragraph{Interprétation des résultats}
 
-Nous voyons que comparé à la version 0 défaillance, l'itération initiale a beaucoup plus de situations redoutées possibles, ce qui est normal pour une situation avec une valve défaillante. \\
-À la première itération, nous remarquons des états puits produits, et que les sommets pour lesquels le niveau d'eau est critique sont tous des deadlocks puisque SR est équivalent à deadlock. \\ 
-Or, en utilisant Altarica studio on s'aperçoit que la trace des deadlock ne nous mènent qu'à 4 sommets. En affichant le graphe avec la commande $dot(any\_s, tr\_deadlock)$, on découvre que ces 4 cas sont lorsque le niveau de l'eau dans la cuve est débordant.
+Nous voyons que comparée à la version 0 défaillance, la configuration initiale a beaucoup plus de situations redoutées possibles, ce qui nous paraît normal étant donné que le modèle a une valve défaillante et donc de nouvelles situations à gérer. \\
+À la première itération, nous remarquons que des états puits sont reconnus, et que les sommets pour lesquels le niveau d'eau est critique sont tous des deadlocks puisque SR est équivalent à deadlock. \\ 
+Or, en utilisant Altarica-Studio, on s'aperçoit que la trace des deadlock ne nous mènent qu'à 4 sommets. En affichant le graphe avec la commande $dot(any\_s, tr\_deadlock)$, on découvre que ces 4 cas recouvrent les situations où le niveau de l'eau dans la cuve est débordant.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=14cm]{img/CtrlF1I1.png}
-  %\caption{}
+  \caption{tr\_deadlock dans le contrôleur CtrlF1I1}
 \end{figure}
 
 \begin{itemize}
-	\item En ayant une valve défaillante, on peut contrôler toutes les situations excepté les débordements de cuves, qui peuvent arriver quelle que soit la valve abîmée. Dans ce cas, on doit trouver une solution spécifique à ce problème : par exemple, garder une ouverture en haut de la cuve qui entrainerait une déperdition de l'eau le temps que l'on répare la valve. Donc non.
-	\item Comme nous le voyons sur l'image : à aucun moment le débit aval n'intervient sur les trajets partant du sommet initial et arrivant à une situation bloquée (deadlock). Donc non.
-
+	\item En ayant une valve défaillante, on peut contrôler toutes les situations exceptées les débordements de cuves qui peuvent arriver quelle que soit la valve abîmée. Dans ce cas, on doit trouver une solution spécifique à ce problème : par exemple, garder une ouverture en haut de la cuve qui entrainerait une perte de l'eau le temps que l'on répare la valve. Donc non.
+	\item Comme nous le voyons sur l'image ci-dessus : à aucun moment le débit aval n'intervient sur les trajets partant du sommet initial et arrivant à une situation bloquée (deadlock). Donc non.
 \end{itemize}
 
 \subsubsection{Avec 2 défaillances (1 point)}
@@ -102,14 +104,19 @@ Or, en utilisant Altarica studio on s'aperçoit que la trace des deadlock ne nou
 \lstinputlisting{Res/System2FCtrl2F4I.res}
 \paragraph{Interprétation des résultats}
 
-Nous remarquons qu'à l'initialisation, il n'y a pas de deadlock mais par contre, le nombre de situation redoutées accessibles sont nombreuses.
-Cependant, à la première occurence, on obtient 2 deadlock traçables. Via altarica-studio, nous avons constaté que le problème survient lorsque le niveau de l'eau dans la cuve est de 2 et que les valves cassées font augmenter son niveau.
+Nous remarquons qu'à l'initialisation, il n'y a pas de deadlock. Par contre, le nombre de situations redoutées accessibles sont nombreuses. \\
+À la première itération, on obtient 2 deadlock traçables. Via Altarica-Studio, nous avons constaté que le problème survient lorsque le niveau de l'eau dans la cuve vaut 2 et que les valves cassées le font augmenter.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=14cm]{img/CtrlF2I1.png}
-  %\caption{}
+  \caption{tr\_deadlock dans le contrôleur CtrlF2I1}
 \end{figure}
+
+\begin{itemize}
+	\item 
+	\item 
+\end{itemize}
 
 \subsubsection{Avec 3 défaillances (1 point)}
 \lstinputlisting{Res/System3FCtrl.res}
@@ -135,14 +142,13 @@ Cependant, à la première occurence, on obtient 2 deadlock traçables. Via alta
 \lstinputlisting{Res/System0FCtrlVV0F4I.res}
 \paragraph{Interprétation des résultats}
 
-Comme attendu, lors des itérations nous n'avons aucune situation redoutée puisque nous traitons un cas sans défaillance. \\ 
+Comme attendu, lors des itérations, nous n'avons aucune situation redoutée puisque nous traitons un cas sans défaillance. \\ 
 On peut donc supposer que l'on est sur un système parfait pour ce nombre de défaillance. Nous remarquons aussi que nous avons les mêmes valeurs que lors de l'utilisation du contrôleur classique avec aucune défaillance, seul le nombre de transition varie.
 
 \begin{itemize}
-	\item Oui, effectivement nous voyons que nous sommes sans situations redoutées mais que CtrlCanControl est de 8.
+	\item Oui, effectivement nous voyons que nous sommes sans situation redoutée mais que CtrlCanControl est de 8.
 	
-	\item Ce cas est similaire au premier cas étudié : Out2 est la sortie utilisée dans le plus de situations (ou sommets) alors que les situations critiques sont nulles. Il est donc optimal.
- 
+	\item Ce cas étant similaire à la première configuration étudiée, nous en tirons la conclusion que le modèle est déjà optimal.
 \end{itemize}
 
 \subsubsection{Avec 1 défaillance (1 point)}
@@ -175,10 +181,9 @@ On peut donc supposer que l'on est sur un système parfait pour ce nombre de dé
 
 \section{Conclusion (2 points)}
 
-Finalement, nous ne sommes pas parvenus à aboutir ce projet. Durant l'analyse des différents systèmes nous nous sommes plusieurs fois demandé quelle est la définition d'une itération sans parvenir à une définition précise. Nous avons donc travaillé sur des suppositions.\\
-De plus, nous n'avons pas compris si nous devions modifier manuellement les contrôleurs générés dans le dossier $Controleurs$ lorsqu'ils ont des deadlocks.\\
-En revanche notre attention s'est focalisée sur le fonctionnement du projet. Nous avons ainsi assimilé la signification des opérateurs et le rôle des composants des systèmes. \\
-
-En nous basant sur nos connaissances d'altarica-studio, nous avons pu exposer des éléments de réponses malgré une exploitation incomplète de ces résultats. \\
+Finalement, nous ne sommes pas parvenus à aboutir à ce projet. Durant l'analyse des différents systèmes nous nous sommes plusieurs fois demandés quelle était la définition d'une itération sans parvenir à une définition précise. Nous avons donc malheureusement travaillé sur des suppositions.\\
+De plus, nous n'avons pas compris si nous devions modifier manuellement les contrôleurs générés dans le dossier $Controleurs$ lorsqu'ils avaient des deadlocks et si oui de quelle manière (sachant que lors des TD sur le système {\tt Building} nous avions vu qu'en rajoutant la trace de propriétés de sûreté au système, on devait rajouter des contraintes dans le modèle via variables et/ou synchronisation d'évènements).\\
+En nous basant sur nos connaissances d'Altarica-Studio, nous avons pu exposer des éléments de réponses malgré une exploitation incomplète de ces résultats. \\
+En revanche, notre attention s'étant focalisée sur le fonctionnement du projet, nous avons ainsi assimilé le rôle des composants dans le système, et plus généralement, la signification des opérateurs et l'importance de la robustesse à apporter dans un modèle. \\
 
 \end{document}
