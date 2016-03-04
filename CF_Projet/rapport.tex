@@ -47,7 +47,8 @@ La contrainte, et assertion, du composant {\tt System} $nbFailures >= (V[0].fail
 \section{Rôle des composants {\tt ValveVirtual} et {\tt CtrlVV} (4 points)}
 
 $ValveVirtual$ est le composant permettant de simuler une valve parfaite, autrement dit sans panne. En l'intégrant au modèle, via CtrlVV, on peut alors confirmer la cohérence du modèle indépendemment de la gestion des pannes. \\
-Pour chaque niveau d'itération, on va donc créer une version virtuelle, sans panne, pour contrôler le système mais aussi créer la version avec Ctrl et Valve qui assure la gestion des pannes.
+$CtrlVV$ est un composant pouvant prendre la place du contrôleur. Ce qui l'en distingue est sa capacité à gérer en parallèle du système, une simulation du système mais dans laquelle aucune panne n'est possible. Lorsqu'il agit sur une des valve du système réel, $CtrlVV$ reproduit la même action sur la Valve correspondante du simulateur. \\
+Si les conséquences dans la cuve réelle sont différentes de celles dans la cuve simulée, alors il détecte une défaillance de cette valve.
 
 \section{Résultats avec le contrôleur initial {\tt Ctrl}}
 
@@ -65,7 +66,7 @@ On observe que sur les différentes itérations : excepté la première, elles s
 
 \begin{itemize}
 	\item Oui. À partir de l'itération 1, il n'y a plus de situation critique et nous n'avions aucun état puit. Or, dans cette situation, CtrlCanControl parvient à contrôler 27 transitions.
-	\item Avec un débit aval de 0, on obtient moins de sommets. On présume donc qu'il est optimal d'avoir un débit de 0 puisque cela nous permet de n'avoir aucune situation critique en gérant moins de cas.
+	\item Out2 étant la sortie utilisée dans le plus de situations (ou sommets) alors que les situations critiques sont nulles. Il est donc optimal.
 
 \end{itemize}
 
@@ -134,6 +135,16 @@ Cependant, à la première occurence, on obtient 2 deadlock traçables. Via alta
 \lstinputlisting{Res/System0FCtrlVV0F4I.res}
 \paragraph{Interprétation des résultats}
 
+Comme attendu, lors des itérations nous n'avons aucune situation redoutée puisque nous traitons un cas sans défaillance. \\ 
+On peut donc supposer que l'on est sur un système parfait pour ce nombre de défaillance. Nous remarquons aussi que nous avons les mêmes valeurs que lors de l'utilisation du contrôleur classique avec aucune défaillance, seul le nombre de transition varie.
+
+\begin{itemize}
+	\item Oui, effectivement nous voyons que nous sommes sans situations redoutées mais que CtrlCanControl est de 8.
+	
+	\item Ce cas est similaire au premier cas étudié : Out2 est la sortie utilisée dans le plus de situations (ou sommets) alors que les situations critiques sont nulles. Il est donc optimal.
+ 
+\end{itemize}
+
 \subsubsection{Avec 1 défaillance (1 point)}
 \lstinputlisting{Res/System1FCtrlVV.res}
 \lstinputlisting{Res/System1FCtrlVV1F1I.res}
@@ -142,6 +153,7 @@ Cependant, à la première occurence, on obtient 2 deadlock traçables. Via alta
 \lstinputlisting{Res/System1FCtrlVV1F4I.res}
 \paragraph{Interprétation des résultats}
 
+
 \subsubsection{Avec 2 défaillances (1 point)}
 \lstinputlisting{Res/System2FCtrlVV.res}
 \lstinputlisting{Res/System2FCtrlVV2F1I.res}
@@ -149,6 +161,7 @@ Cependant, à la première occurence, on obtient 2 deadlock traçables. Via alta
 \lstinputlisting{Res/System2FCtrlVV2F3I.res}
 \lstinputlisting{Res/System2FCtrlVV2F4I.res}
 \paragraph{Interprétation des résultats}
+
 
 \subsubsection{Avec 3 défaillances (1 point)}
 \lstinputlisting{Res/System3FCtrlVV.res}
@@ -161,5 +174,11 @@ Cependant, à la première occurence, on obtient 2 deadlock traçables. Via alta
 \subsection{Calcul des contrôleurs optimisés (2 points)}
 
 \section{Conclusion (2 points)}
+
+Finalement, nous ne sommes pas parvenus à aboutir ce projet. Durant l'analyse des différents systèmes nous nous sommes plusieurs fois demandé quelle est la définition d'une itération sans parvenir à une définition précise. Nous avons donc travaillé sur des suppositions.\\
+De plus, nous n'avons pas compris si nous devions modifier manuellement les contrôleurs générés dans le dossier $Controleurs$ lorsqu'ils ont des deadlocks.\\
+En revanche notre attention s'est focalisée sur le fonctionnement du projet. Nous avons ainsi assimilé la signification des opérateurs et le rôle des composants des systèmes. \\
+
+En nous basant sur nos connaissances d'altarica-studio, nous avons pu exposer des éléments de réponses malgré une exploitation incomplète de ces résultats. \\
 
 \end{document}

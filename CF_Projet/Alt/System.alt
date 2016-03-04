@@ -1,7 +1,7 @@
 node SystemNbPannesFNomDuControleur
   sub   V : Valve[3];
         T : Tank;
-	C : NomDuControleur;
+	      C : NomDuControleur;
   assert T.input = (V[0].rate + V[1].rate);
          T.output = V[2].rate;
 	 /* les observations du controleurs */
