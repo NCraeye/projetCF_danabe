@@ -87,14 +87,12 @@ Or, en utilisant Altarica studio on s'aperçoit que la trace des deadlock ne nou
   %\caption{}
 \end{figure}
 
-
-La situation se stabilise à l'itération 2 : Par la suite, il n'y a plus de changement de valeurs. Mais avant ca, entre l'itération 1 et l'itération 2, on remarque le seul le nombre de transitions change, les états sont déjà stables.
-
 \begin{itemize}
-	\item En ayant une valve défaillante, on peut contrôler toutes les situations excepté les débordements de cuves, qui peuvent arriver quelle que soit la valve abîmée. Dans ce cas, on doit trouver une solution spécifique à ce problème : par exemple, garder une ouverture en haut de la cuve qui entrainerait une déperdition de l'eau le temps que l'on répare la valve.
-	\item 
+	\item En ayant une valve défaillante, on peut contrôler toutes les situations excepté les débordements de cuves, qui peuvent arriver quelle que soit la valve abîmée. Dans ce cas, on doit trouver une solution spécifique à ce problème : par exemple, garder une ouverture en haut de la cuve qui entrainerait une déperdition de l'eau le temps que l'on répare la valve. Donc non.
+	\item Comme nous le voyons sur l'image : à aucun moment le débit aval n'intervient sur les trajets partant du sommet initial et arrivant à une situation bloquée (deadlock). Donc non.
 
 \end{itemize}
+
 \subsubsection{Avec 2 défaillances (1 point)}
 \lstinputlisting{Res/System2FCtrl.res}
 \lstinputlisting{Res/System2FCtrl2F1I.res}
@@ -103,6 +101,15 @@ La situation se stabilise à l'itération 2 : Par la suite, il n'y a plus de cha
 \lstinputlisting{Res/System2FCtrl2F4I.res}
 \paragraph{Interprétation des résultats}
 
+Nous remarquons qu'à l'initialisation, il n'y a pas de deadlock mais par contre, le nombre de situation redoutées accessibles sont nombreuses.
+Cependant, à la première occurence, on obtient 2 deadlock traçables. Via altarica-studio, nous avons constaté que le problème survient lorsque le niveau de l'eau dans la cuve est de 2 et que les valves cassées font augmenter son niveau.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=14cm]{img/CtrlF2I1.png}
+  %\caption{}
+\end{figure}
+
 \subsubsection{Avec 3 défaillances (1 point)}
 \lstinputlisting{Res/System3FCtrl.res}
 \lstinputlisting{Res/System3FCtrl3F1I.res}
@@ -110,6 +117,8 @@ La situation se stabilise à l'itération 2 : Par la suite, il n'y a plus de cha
 \lstinputlisting{Res/System3FCtrl3F3I.res}
 \lstinputlisting{Res/System3FCtrl3F4I.res}
 \paragraph{Interprétation des résultats}
+
+
 
 \subsection{Calcul des contrôleurs optimisés (2 points)}
 
