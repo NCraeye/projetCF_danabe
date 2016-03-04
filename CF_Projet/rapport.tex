@@ -35,10 +35,11 @@ Synthèse (assistée) d'un contrôleur du niveau d'une cuve}
 
 \chapter{Le rapport}
 
-Pour les deux questions qui suivent, nous avons analysé essentiellement le fichier GNUmakefile à la racine du projet, mais aussi les fichiers System.alt, Parameters.alt, tank.alt, test.alt, et CtrlVV.alt.
+Pour les deux questions concernant l'étude des constante et composants, nous avons analysé essentiellement le fichier GNUmakefile à la racine du projet, mais aussi les fichiers System.alt, Parameters.alt, tank.alt, test.alt, et CtrlVV.alt.
 En effet nous avons remarqué, dans le fichier GNUmakefile, qu'à l'utilisation de la commande "make" on génère toutes les configurations possibles du système sur lequel nous travaillons : 
-une première boucle for assure la génération des fichiers pour tous les contrôleurs (Ctrl et CtrlVV) ; puis une deuxième boucle for va produire, pour chacun d'entre eux, les différents systèmes associés aux différents nombres de pannes possibles (i.e : 0, 1, 2 et 3).
+une première boucle for assure la génération des fichiers pour tous les contrôleurs (Ctrl et CtrlVV) ; puis une deuxième boucle for va produire, pour chacun d'entre eux, les différents systèmes associés aux différents nombres de pannes possibles (i.e : 0, 1, 2 et 3). \\
 
+Pour les questions portant sur l'analyse des 8 systèmes, nous avons utilisé les outils suivants, et dans cet ordre : GNUmakefile (via la commande $make$) puis Altarica-Studio (via la commande $altarica-studio Alt/System.alt Spec/System.spe$) à la racine du projet. De plus, pour obtenir l'affichage, dans les fichiers résultats générés, du nombre de deadlock traçables dans certains systèmes à partir de certaines itérations, nous avons modifié la commande show dans $System.spe$ en lui rajoutant en argument la propriété tr\_deadlock :  {\tt show(any\_s, any\_t, deadlock, tr\_deadlock, NC, SR , out0, out1, out2, CtrlCanControl,CCoupGagnant, CCoupGagnantUtile) > 'Res/\$NODENAME.res';}. Pour finir, pour pouvoir analyser les traces des deadlock dans l'onglet {\tt Graph}, via la commande $dot(any\_s, tr\_deadlock)$, sous Altarica-Studio, nous modifions les variables $PANNES$, $ITERATIONS$ et $CONTROLEURS\_INIT$ dans le GNUmakefile à la racine du projet de sorte que nous retrouvions plus vite la configuration du système avec deadlocks que l'on souhaitait étudiée.
 
 \section{Rôle de la constante {\tt nbFailures} (2 points)}
 
@@ -104,8 +105,8 @@ Or, en utilisant Altarica-Studio, on s'aperçoit que la trace des deadlock ne no
 \lstinputlisting{Res/System2FCtrl2F4I.res}
 \paragraph{Interprétation des résultats}
 
-Nous remarquons qu'à l'initialisation, il n'y a pas de deadlock. Par contre, le nombre de situations redoutées accessibles sont nombreuses. \\
-À la première itération, on obtient 2 deadlock traçables. Via Altarica-Studio, nous avons constaté que le problème survient lorsque le niveau de l'eau dans la cuve vaut 2 et que les valves cassées le font augmenter.
+Nous remarquons qu'à l'initialisation, il n'y a pas de deadlock. Par contre, le nombre de situations redoutées accessibles est grand. \\
+À chaque itération, on obtient 2 deadlock traçables. Via Altarica-Studio, nous avons constaté que le problème survient lorsque le niveau de l'eau dans la cuve vaut 2 et que les 2 valves cassées le font augmenter.
 
 \begin{figure}[H]
   \centering
@@ -114,7 +115,7 @@ Nous remarquons qu'à l'initialisation, il n'y a pas de deadlock. Par contre, le
 \end{figure}
 
 \begin{itemize}
-	\item 
+	\item Non car d'après les résultats, il y a toujours les 2 mêmes deadlock traçables et un nombre d'états puits se stabilisant autour de 270.
 	\item 
 \end{itemize}
 
@@ -126,7 +127,12 @@ Nous remarquons qu'à l'initialisation, il n'y a pas de deadlock. Par contre, le
 \lstinputlisting{Res/System3FCtrl3F4I.res}
 \paragraph{Interprétation des résultats}
 
+En rapport avec le très grand nombre de situations à traiter, le nombre de coups contrôlables et gagnants n'est pas très important dans la configuration initiale mais nous pouvons noter que ce ratio s'améliore après la première itération.
 
+\begin{itemize}
+	\item Oui car le système semble gérer un peu les défaillances vu que les deadlocks diminuent jusqu'à 27 et qu'à chaque itération il y en a 2 qui sont traçables.
+	\item 
+\end{itemize}
 
 \subsection{Calcul des contrôleurs optimisés (2 points)}
 
@@ -143,11 +149,10 @@ Nous remarquons qu'à l'initialisation, il n'y a pas de deadlock. Par contre, le
 \paragraph{Interprétation des résultats}
 
 Comme attendu, lors des itérations, nous n'avons aucune situation redoutée puisque nous traitons un cas sans défaillance. \\ 
-On peut donc supposer que l'on est sur un système parfait pour ce nombre de défaillance. Nous remarquons aussi que nous avons les mêmes valeurs que lors de l'utilisation du contrôleur classique avec aucune défaillance, seul le nombre de transition varie.
+On peut donc supposer que l'on est sur un système parfait pour ce nombre de défaillance. Nous remarquons aussi que nous avons les mêmes valeurs que lors de l'utilisation du contrôleur classique avec aucune défaillance possible, seul le nombre de transitions varie.
 
 \begin{itemize}
-	\item Oui, effectivement nous voyons que nous sommes sans situation redoutée mais que CtrlCanControl est de 8.
-	
+	\item Oui, effectivement nous voyons que nous sommes sans situation redoutée mais que CtrlCanControl n'est que de 8.
 	\item Ce cas étant similaire à la première configuration étudiée, nous en tirons la conclusion que le modèle est déjà optimal.
 \end{itemize}
 
@@ -159,6 +164,13 @@ On peut donc supposer que l'on est sur un système parfait pour ce nombre de dé
 \lstinputlisting{Res/System1FCtrlVV1F4I.res}
 \paragraph{Interprétation des résultats}
 
+Dans la nouvelle configuration initiale, le nombre de situations, {\tt any\_s}, valant 1201, nous pouvons voir que ce nombre est 6 fois plus grand que l'ensemble des états au départ du même système sans défaillance.
+Dans ce système, c'est seulement à la suite de 3 itérations que le système est totalement fiable (sans aucune situation redoutée), probablement parce que c'est le temps qu'il met à corriger les trois défaillances possibles (car 1 seule défaillance dans le système).
+
+\begin{itemize}
+	\item Oui, nous pouvons optimiser en évitant les situations redoutée : c'est exactement le rôle de {\tt CtrlVV}. L'action sur la valve défaillante réelle sera rectifiée par ce dernier. C'est pourquoi qu'au fur-et-à mesure des itérations le nombre de deadlock d'abord augmente puis tend à disparaître.
+	\item 
+\end{itemize}
 
 \subsubsection{Avec 2 défaillances (1 point)}
 \lstinputlisting{Res/System2FCtrlVV.res}
@@ -168,6 +180,12 @@ On peut donc supposer que l'on est sur un système parfait pour ce nombre de dé
 \lstinputlisting{Res/System2FCtrlVV2F4I.res}
 \paragraph{Interprétation des résultats}
 
+Encore une fois, le nombre de situations à traiter double par rapport au système initial précédent. Après la première itération le modèle s'est assez raffiné pour qu'il n'y ait plus aucune situations redoutées.
+
+\begin{itemize}
+	\item Oui, c'est le rôle des premières itérations. C'est d'ailleurs pourquoi au fur-et-à mesure des itérations le nombre de deadlock d'abord augmente puis tend à disparaître. Nous pouvons également dire que dès la troisième itéraion, le système n'a plus qu'une situation atteignable, et elle est gagnante.
+	\item Non car d'après les résultats, dans les situations fiables de ce systèmes le débit aval n'est pas optimal car c'est $out0$ qui vaut $any\_s$.
+\end{itemize}
 
 \subsubsection{Avec 3 défaillances (1 point)}
 \lstinputlisting{Res/System3FCtrlVV.res}
@@ -177,11 +195,18 @@ On peut donc supposer que l'on est sur un système parfait pour ce nombre de dé
 \lstinputlisting{Res/System3FCtrlVV3F4I.res}
 \paragraph{Interprétation des résultats}
 
+La configuration initiale, reconnait bien les 27 coups possibles du systèmes car il y a 27 $CtrlCanControl$. Comme il y a beaucoup plus de situations possibles alors il y a également beaucoup de $NC$.
+
+\begin{itemize}
+	\item Oui, c'est le rôle de la première itération. Dès la deuxième itération, le nombre de situations redoutées est à 0 et il n'y a plus qu'une situation gagnante qui est atteignable.
+	\item Non car d'après les résultats, dans les situations fiables de ce systèmes le débit aval n'est pas optimal car c'est $out0$ qui vaut $any\_s$.
+\end{itemize}
+
 \subsection{Calcul des contrôleurs optimisés (2 points)}
 
 \section{Conclusion (2 points)}
 
-Finalement, nous ne sommes pas parvenus à aboutir à ce projet. Durant l'analyse des différents systèmes nous nous sommes plusieurs fois demandés quelle était la définition d'une itération sans parvenir à une définition précise. Nous avons donc malheureusement travaillé sur des suppositions.\\
+Finalement, nous ne sommes pas parvenus à aboutir à ce projet. Durant l'analyse des différents systèmes, nous nous sommes plusieurs fois demandés quelles étaient la définition d'une itération et la signification de l'optimisation du débit aval sans parvenir à des définitions/conclusions précises. Nous avons donc malheureusement travaillé sur plusieurs suppositions.\\
 De plus, nous n'avons pas compris si nous devions modifier manuellement les contrôleurs générés dans le dossier $Controleurs$ lorsqu'ils avaient des deadlocks et si oui de quelle manière (sachant que lors des TD sur le système {\tt Building} nous avions vu qu'en rajoutant la trace de propriétés de sûreté au système, on devait rajouter des contraintes dans le modèle via variables et/ou synchronisation d'évènements).\\
 En nous basant sur nos connaissances d'Altarica-Studio, nous avons pu exposer des éléments de réponses malgré une exploitation incomplète de ces résultats. \\
 En revanche, notre attention s'étant focalisée sur le fonctionnement du projet, nous avons ainsi assimilé le rôle des composants dans le système, et plus généralement, la signification des opérateurs et l'importance de la robustesse à apporter dans un modèle. \\
